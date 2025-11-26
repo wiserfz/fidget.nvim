@@ -113,10 +113,6 @@ M.options = {
 
 require("fidget.options").declare(M, "notification.view", M.options)
 
---- True when using GUI clients like neovide. Set before each render() phase.
----@type boolean
-local is_multigrid_ui = false
-
 ---@return boolean is_multigrid_ui
 function M.check_multigrid_ui()
   for _, ui in ipairs(vim.api.nvim_list_uis()) do
@@ -126,6 +122,10 @@ function M.check_multigrid_ui()
   end
   return false
 end
+
+--- True when using GUI clients like neovide. Set before each render() phase.
+---@type boolean
+local is_multigrid_ui = M.check_multigrid_ui()
 
 ---  Whether nr is a codepoint representing whitespace.
 ---
@@ -415,8 +415,6 @@ end
 ---@return NotificationLine[] lines
 ---@return integer width
 function M.render(now, groups)
-  is_multigrid_ui = M.check_multigrid_ui()
-
   ---@type NotificationLine[][]
   local chunks = {}
   local max_width = 0
