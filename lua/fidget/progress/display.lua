@@ -11,8 +11,14 @@ function M.default_format_message(msg)
   if not message then
     message = msg.done and "Completed" or "In progress..."
   end
-  if msg.percentage ~= nil then
+  if type(msg.percentage) == "number" then
     message = string.format("%s (%.0f%%)", message, msg.percentage)
+  elseif type(msg.percentage) == "string" then
+    message = string.format("%s (%s)", message, msg.percentage)
+  elseif msg.percentage ~= nil then
+    -- We got some percentage but don't know how to format it (uncommon).
+    -- Render something anyway so the user knows there's something there.
+    message = string.format("%s (???)", message)
   end
   return message
 end
